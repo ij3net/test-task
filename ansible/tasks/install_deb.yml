@@ -1,0 +1,31 @@
+# file: tasks/install_deb.yml -- install postgresql packages for Debian/Ubuntu
+---
+
+- name: "Ensure the repository signing key is present"
+  apt_key: url=http://packages.2ndquadrant.com/pglogical/apt/AA7A6805.asc state=present
+
+- name: "Ensure the PostgreSQL quadrant repo present"
+  apt_repository: repo="deb http://packages.2ndquadrant.com/pglogical/apt/ xenial-2ndquadrant main" state=present
+
+- name: "Ensure the pg repository signing key is present"
+  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
+
+- name: "Ensure the PostgreSQL repo present"
+  apt_repository: repo="deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" state=present
+
+- name: "Update the package list  apt-get update"
+  apt: update_cache=yes
+
+- name: "Stage 1 install postgresql package"
+  apt:
+    state: latest
+    pkg: "{{ item }}"
+  with_items:
+    - postgresql-{{ postgresql_version }}
+    - locales-all
+    - postgresql-{{ postgresql_version }}-pglogical
+
+- name: "Docker fix"
+  file: "{{ postgresql_version }}-main.pg_stat_tmp owner=postgres group=postgres state=directory path=/var/run/postgresql/"
+- name: "Docker fix"
+  shell: "mkdir -p /var/run/postgresql/{{ postgresql_version }}-main.pg_stat_tmp && chown postgres.postgres /var/run/postgresql/{{ postgresql_version }}-main.pg_stat_tmp -R"

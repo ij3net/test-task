@@ -1,0 +1,5 @@
+[pgmaster]
+pgmaster      ansible_ssh_host=do.cloud-ops.tk ansible_ssh_port=2200 ansible_ssh_user=ij ansible_ssh_private_key_file=/home/ij/.ssh/id_rsa
+
+[pgslave]
+pgslave       ansible_ssh_host=do.cloud-ops.tk ansible_ssh_port=2201 ansible_ssh_user=ij ansible_ssh_private_key_file=/home/ij/.ssh/id_rsa

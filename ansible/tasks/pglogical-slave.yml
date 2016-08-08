@@ -1,0 +1,5 @@
+# file: tasks/databases.yml -- manage databases
+- name: "Upload slave sql"
+  template: src=slave.sql.j2 dest=/tmp/slave.sql owner=postgres group=postgres mode=0666
+- name: "Create pglogical master"
+  shell: psql -U postgres world -f /tmp/slave.sql

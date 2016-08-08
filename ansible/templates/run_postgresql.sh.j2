@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# This script is run by Supervisor to start PostgreSQL 9.5 in foreground mode
+
+if [ -d /var/run/postgresql ]; then
+    chmod 2775 /var/run/postgresql
+else
+    install -d -m 2775 -o postgres -g postgres /var/run/postgresql
+fi
+
+exec su postgres -c "{{ postgresql_exec_dir }}/postgres -D {{ postgresql_data_dir }} -c config_file={{ postgresql_conf_dir }}/postgresql.conf"

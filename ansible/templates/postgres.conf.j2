@@ -1,0 +1,8 @@
+[program:postgres]
+user=root
+group=root
+command=/usr/local/bin/run_postgresql.sh
+autostart=true
+autorestart=true
+redirect_stderr=true
+stopsignal=QUIT

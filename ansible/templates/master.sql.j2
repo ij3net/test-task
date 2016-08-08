@@ -1,0 +1,5 @@
+CREATE EXTENSION pglogical;
+SELECT pglogical.create_node( node_name := 'pgmaster', dsn := 'host=pgmaster port=5432 dbname=world');
+SELECT pglogical.create_replication_set(set_name:='worldreplica');
+SELECT pglogical.replication_set_add_table(set_name:='worldreplica', relation:='city', synchronize_data:=true);
+SELECT pglogical.create_node(node_name:='pgslave', dsn:='host=pgslave port=5432 dbname=world');

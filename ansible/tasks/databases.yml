@@ -1,0 +1,31 @@
+# file: tasks/databases.yml -- manage databases
+
+- name: "Stage 4: add databases"
+  postgresql_db:
+    state: present
+    name: "{{ item.name }}"
+    template: "{{ item.template }}"
+    encoding: "{{ item.encoding }}"
+    lc_collate: "{{ item.collate }}"
+    lc_ctype: "{{ item.ctype }}"
+    owner: "{{ item.owner }}"
+  with_items: "{{ postgresql_databases }}"
+  when: postgresql_databases and postgresql_databases|length > 0
+
+- name: "Stage: 4: add extensions"
+  become: yes
+  become_user: "{{ postgresql_admin_user }}"
+  command: "psql {{ item[0].name }} -c 'CREATE EXTENSION IF NOT EXISTS {{ item[1] }}'"
+  with_nested:
+    - "{{ postgresql_databases }}"
+    - "{{ postgresql_extensions }}"
+  when: postgresql_databases and postgresql_databases|length > 0 and postgresql_extensions and postgresql_extensions|length > 0 and postgresql_version != '8.4'
+
+- name: "Extract DB"
+  unarchive: 
+    src: http://pgfoundry.org/frs/download.php/527/world-1.0.tar.gz
+    dest: /tmp/
+    copy: no
+
+- name: "Restore DB"
+  shell: psql -U postgres world -f /tmp/dbsamples-0.1/world/world.sql

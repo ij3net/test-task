@@ -1,0 +1,23 @@
+# file: tasks/install_supervisor.yml install postgres to supervisor app
+---
+- name: "Stage 2: install postgres to supervisor"
+  template:
+    src: postgres.conf.j2
+    dest: /etc/supervisor/conf.d/postgres.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "Stage 2: install postgres startup script for supervisor"
+  template:
+    src: run_postgresql.sh.j2
+    dest: /usr/local/bin/run_postgresql.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: "Stage 2: install app into supervisor"
+  supervisorctl:
+    name: postgres
+    state: present
+

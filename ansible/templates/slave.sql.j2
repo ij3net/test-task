@@ -1,0 +1,2 @@
+CREATE EXTENSION pglogical;
+SELECT pglogical.create_subscription(subscription_name := 'pgslavesub', provider_dsn:= 'host=pgmaster port=5432 dbname=world', replication_sets:='{worldreplica}');

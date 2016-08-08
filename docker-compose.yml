@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+  pgmaster:
+    env_file:
+      - ./.env
+    build: ./master
+    environment:
+     - BASE_USER
+    volumes:
+      - "./config:/opt/config/:ro"
+    ports:
+      - "25432:5432"
+      - "2200:22"
+    depends_on:
+      - "pgslave"
+
+  pgslave:
+    env_file:
+      - ./.env
+    build: ./slave
+    environment:
+     - BASE_USER
+    ports:
+      - "35432:5432"
+      - "2201:22"
+    volumes:
+      - "./config/:/opt/config/:ro"
