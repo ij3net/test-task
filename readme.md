@@ -12,7 +12,7 @@ sudo docker compose up
 #This part deploing requested configuration to configured invertory
 cd ./ansible/
 
-#Setup invertry
+#Setup invertory
 
 vi ./invertory
 
