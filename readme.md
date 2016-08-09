@@ -7,6 +7,8 @@ git clone https://github.com/ij3net/test-task.git
 
 cd ./test-task/pg_cluster
 
+ln -s ./master ./slave
+# ^can be ./slave[n]
 sudo docker compose up
 
 #This part deploing requested configuration to configured invertory
